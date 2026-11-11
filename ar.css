@@ -1,0 +1,16 @@
+#launch-ar {
+  position: absolute;
+  z-index: 2;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+#launch-ar:disabled, #ar-place:disabled { opacity: .65; }
+#ar-panel { position: fixed; inset: 0; z-index: 20; background: #111; color: #fff; }
+#ar-canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+#ar-close { position: absolute; top: max(16px, env(safe-area-inset-top)); left: 16px; padding: 10px 16px; font-size: 15px; }
+#ar-controls { position: absolute; inset: auto 16px max(18px, env(safe-area-inset-bottom)); text-align: center; }
+#ar-instruction { display: table; max-width: 380px; margin: 0 auto 12px; padding: 8px 14px; border-radius: 12px; background: #000c; }
+#ar-reticle { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border: 2px solid white; border-radius: 50%; box-shadow: 0 0 0 1px #0007; pointer-events: none; }
+#ar-reticle.ready { background: #fff7; }

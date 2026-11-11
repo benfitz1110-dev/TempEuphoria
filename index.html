@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Found on the Oval</title>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.4.0/dist/model-viewer.min.js"></script>
+  <script defer src="./app.js"></script>
+  <style>
+    html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; background: #f4f1ec; color: #222; }
+    #panel { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; }
+    h1 { margin: 0 0 8px; font-size: 26px; color: #bb0000; }
+    #status { font-size: 20px; margin: 16px 0 4px; }
+    #coords { font: 12px ui-monospace, monospace; opacity: .6; }
+    button { font: inherit; font-size: 18px; padding: 14px 40px; border: 0; border-radius: 999px; background: #bb0000; color: #fff; font-weight: 600; }
+    #object-stage { position: fixed; inset: 0; display: none; z-index: 10; background: #f4f1ec; }
+    #object-stage.open { display: block; }
+    model-viewer { position: absolute; inset: 0; width: 100%; height: 100%; background: #f4f1ec; }
+    body.preview #panel { display: none; }
+    #close-model { position: absolute; z-index: 1; top: 16px; left: 16px; padding: 10px 16px; font-size: 15px; }
+    body.preview #close-model { display: none; }
+    model-viewer [slot="ar-button"] { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); }
+    #open-nearby { margin-top: 16px; }
+    #model-message { position: absolute; z-index: 1; top: 50%; left: 50%; transform: translate(-50%, -50%); width: min(320px, 85vw); text-align: center; }
+    #model-message.ar-error { top: auto; bottom: 95px; transform: translateX(-50%); background: #f4f1ec; border-radius: 12px; padding: 8px; }
+    #model-message p { margin: 0 0 10px; }
+    #scout { display: none; width: 100%; max-width: 420px; margin-top: 16px; }
+    #scout.on { display: block; }
+    #spots { list-style: none; padding: 0; margin: 16px 0 0; text-align: left; font: 13px ui-monospace, monospace; }
+    #spots li { background: #fff; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+    #spots b { font-family: system-ui, sans-serif; }
+  </style>
+  <!-- XR Engine software: Copyright © 2026 Niantic Spatial, Inc. See https://github.com/8thwall/engine/blob/main/LICENSE -->
+  <script id="xr-engine" src="https://cdn.jsdelivr.net/npm/@8thwall/engine-binary@1/dist/xr.js" async crossorigin="anonymous"></script>
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.183.2/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.183.2/examples/jsm/"}}
+  </script>
+  <link rel="stylesheet" href="./ar.css">
+
+</head>
+<body>
+  <div id="panel">
+    <h1>Found on the Oval</h1>
+    <p>Walk to the spots to unlock the objects.</p>
+    <button id="go">Start</button>
+    <div id="status" role="status"></div>
+    <div id="coords"></div>
+    <button id="open-nearby" hidden>View nearby object</button>
+
+    <!-- Scout mode (?scout): walk the Oval and mark candidate spots -->
+    <div id="scout">
+      <button id="mark" disabled>Mark this spot</button>
+      <ul id="spots"></ul>
+    </div>
+  </div>
+
+  <div id="object-stage">
+    <button id="close-model">Back to exploring</button>
+    <div id="models"></div>
+    <button id="launch-ar" type="button" hidden>Open camera AR</button>
+    <div id="model-message" hidden>
+      <p id="model-status" role="status"></p>
+      <button id="retry-model" hidden>Retry model</button>
+    </div>
+  </div>
+
+  <section id="ar-panel" aria-label="Camera AR" hidden>
+    <canvas id="ar-canvas"></canvas>
+    <button id="ar-close" type="button">Close AR</button>
+    <div id="ar-reticle" hidden></div>
+    <div id="ar-controls">
+      <p id="ar-instruction" role="status"></p>
+      <button id="ar-place" type="button" disabled>Place here</button>
+    </div>
+  </section>
+
+</body>
+</html>
